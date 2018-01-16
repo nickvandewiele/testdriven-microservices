@@ -24,7 +24,7 @@ services:
     container_name: users-db
     build:
       context: ./users-service/project/db
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     ports:
       - 5435:5432
     environment:
