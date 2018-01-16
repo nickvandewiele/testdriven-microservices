@@ -24,4 +24,4 @@ ADD . /usr/src/app
 
 # run server
 RUN chmod +x ./entrypoint.sh
-CMD ["./entrypoint.sh"]
+CMD ./entrypoint.sh
