@@ -2,10 +2,10 @@ version: '3.3'
 
 services:
 
-  users-service:
-    container_name: users-service
+  users:
+    container_name: users
     build:
-      context: ./users-service
+      context: ./services/users
       dockerfile: Dockerfile-prod
     expose:
       - '5000'
@@ -21,7 +21,7 @@ services:
   users-db:
     container_name: users-db
     build:
-      context: ./users-service/project/db
+      context: ./services/users/project/db
       dockerfile: dockerfile
     ports:
       - 5435:5432
@@ -36,6 +36,6 @@ services:
     ports:
       - 80:80
     depends_on:
-      - users-service
+      - users
     links:
-      - users-service
+      - users
