@@ -1,14 +1,18 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 const Form = (props) => {
+
+	if (props.isAuthenticated){
+		return <Redirect to='/' />;
+	}
+
 	return (
 		<div>
 			<h1>{props.formType}</h1>
 			<hr/><br/>
 			<form onSubmit={(event) => props.handleUserFormSubmit(event)}>
 
-				// username form field
-				// javascript inline if: true && expression evaluates to expression
 				{props.formType === 'Register' &&
 					<div className="form-group">
 						<input
@@ -23,7 +27,6 @@ const Form = (props) => {
 					</div>
 				}
 
-				// e-mail field
 				<div className="form-group">
 					<input
 						name="email"
@@ -37,7 +40,6 @@ const Form = (props) => {
 				</div>
 
 
-				// password form field
 				<div className="form-group">
 					<input
 						name="password"
@@ -50,7 +52,6 @@ const Form = (props) => {
 					/>
 				</div>
 
-				// submit button
 				<input
 					type="submit"
 					className="btn btn-primary btn-lg btn-block"
