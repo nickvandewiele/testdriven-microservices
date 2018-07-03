@@ -2,6 +2,7 @@
 
 import os
 
+
 class BaseConfig:
     """Base configuration"""
     DEBUG = False
@@ -14,12 +15,14 @@ class BaseConfig:
     TOKEN_EXPIRATION_DAYS = 30
     TOKEN_EXPIRATION_SECONDS = 0
 
+
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     DEBUG_TB_ENABLED = True
     BCRYPT_LOG_ROUNDS = 4
+
 
 class TestingConfig(BaseConfig):
     """Testing configuration"""

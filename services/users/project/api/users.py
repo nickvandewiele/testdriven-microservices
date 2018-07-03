@@ -18,6 +18,7 @@ def ping_pong():
         'message': 'pong!'
     })
 
+
 @users_blueprint.route('/users', methods=['POST'])
 @authenticate
 def add_user(resp):
@@ -41,8 +42,9 @@ def add_user(resp):
 
     try:
         user = User.query.filter_by(email=email).first()
-        if not user:        
-            db.session.add(User(username=username, email=email, password=password))
+        if not user:
+            db.session.add(User(username=username, email=email,
+                                password=password))
             db.session.commit()
             response_object = {
                 'status': 'success',
@@ -53,10 +55,10 @@ def add_user(resp):
             response_object['message'] = 'Sorry. That email already exists.'
             return jsonify(response_object), 400
 
-
     except (exc.IntegrityError, ValueError) as e:
         db.session.rollback()
         return jsonify(response_object), 400
+
 
 @users_blueprint.route('/users/<user_id>', methods=['GET'])
 def get_single_user(user_id):
@@ -83,6 +85,7 @@ def get_single_user(user_id):
     except ValueError:
         return jsonify(response_object), 404
 
+
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_user():
     """Get all users"""
@@ -93,6 +96,7 @@ def get_all_user():
         }
     }
     return jsonify(response_object), 200
+
 
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def index():

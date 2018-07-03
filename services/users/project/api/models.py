@@ -5,6 +5,7 @@ from project import db
 from project import bcrypt
 from flask import current_app
 
+
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -24,13 +25,13 @@ class User(db.Model):
 
     def to_json(self):
         return {
-        'id': self.id,
-        'username': self.username,
-        'email': self.email,
-        'active': self.active,
-        'admin': self.admin,
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'active': self.active,
+            'admin': self.admin,
 
-    }
+        }
 
     def encode_auth_token(self, user_id):
         """
@@ -58,7 +59,8 @@ class User(db.Model):
     def decode_auth_token(auth_token):
 
         try:
-            payload = jwt.decode(auth_token, current_app.config.get('SECRET_KEY'))
+            payload = jwt.decode(auth_token,
+                                 current_app.config.get('SECRET_KEY'))
             return payload['sub']
 
         except jwt.ExpiredSignatureError as e:
@@ -66,4 +68,3 @@ class User(db.Model):
 
         except jwt.InvalidTokenError as e:
             return 'Invalid token. Please log in again.'
-

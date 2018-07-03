@@ -1,11 +1,10 @@
-import unittest
-
 from sqlalchemy.exc import IntegrityError
 
 from project import db
 from project.api.models import User
 from project.tests.base import BaseTestCase
 from project.tests.utils import add_user
+
 
 class TestUserModel(BaseTestCase):
 
@@ -18,7 +17,7 @@ class TestUserModel(BaseTestCase):
         self.assertFalse(user.admin)
 
     def test_add_user_duplicate_username(self):
-        user = add_user('justatest', 'test@test.com', 'greaterthaneight')
+        add_user('justatest', 'test@test.com', 'greaterthaneight')
         duplicate_user = User(
             username='justatest',
             email='test@test2.com',
@@ -28,9 +27,8 @@ class TestUserModel(BaseTestCase):
         with self.assertRaises(IntegrityError):
             db.session.commit()
 
-
     def test_add_user_duplicate_email(self):
-        user = add_user('justatest', 'test@test.com', 'greaterthaneight')
+        add_user('justatest', 'test@test.com', 'greaterthaneight')
         duplicate_user = User(
             username='justanothertest',
             email='test@test.com',
@@ -40,8 +38,8 @@ class TestUserModel(BaseTestCase):
         self.assertRaises(IntegrityError, db.session.commit)
 
     def test_to_json(self):
-      user = add_user('justatest', 'test@test.com', 'greaterthaneight')
-      self.assertTrue(isinstance(user.to_json(), dict))
+        user = add_user('justatest', 'test@test.com', 'greaterthaneight')
+        self.assertTrue(isinstance(user.to_json(), dict))
 
     def test_passwords_are_random(self):
         user_one = add_user('justatest', 'test@test.com', 'greaterthaneight')
@@ -59,11 +57,9 @@ class TestUserModel(BaseTestCase):
         user = add_user('justatest', 'test@test.com', 'greaterthaneight')
 
         # generate token first:
-        auth_token = user.encode_auth_token(user.id)        
+        auth_token = user.encode_auth_token(user.id)
         self.assertTrue(isinstance(auth_token, bytes), auth_token)
 
         # decode auth token
         user_id = user.decode_auth_token(auth_token)
         self.assertEqual(user_id, user.id)
-
-        

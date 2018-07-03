@@ -7,6 +7,7 @@ from project.api.utils import authenticate
 
 auth_blueprint = Blueprint('auth', __name__)
 
+
 @auth_blueprint.route('/auth/register', methods=['POST'])
 def register_user():
     # get post data
@@ -25,11 +26,11 @@ def register_user():
     password = post_data.get('password')
 
     try:
-        
+
         # check for existing user
         user = User.query.filter(
             or_(User.username == username, User.email == email)).first()
-        
+
         if not user:
             # add new user to db
             new_user = User(
@@ -39,14 +40,14 @@ def register_user():
             )
             db.session.add(new_user)
             db.session.commit()
-            
+
             # generate auth token
             auth_token = new_user.encode_auth_token(new_user.id)
-            
+
             response_object['status'] = 'success'
             response_object['message'] = 'Successfully registered.'
             response_object['auth_token'] = auth_token.decode()
-            
+
             return jsonify(response_object), 201
 
         else:
@@ -85,7 +86,7 @@ def login_user():
                 response_object['message'] = 'Successfully logged in.'
                 response_object['auth_token'] = auth_token.decode()
                 return jsonify(response_object), 200
-            
+
         else:
             response_object['message'] = 'User does not exist.'
             return jsonify(response_object), 404
@@ -93,6 +94,7 @@ def login_user():
     except Exception as e:
         response_object['message'] = 'Try again.'
         return jsonify(response_object), 500
+
 
 @auth_blueprint.route('/auth/logout', methods=['GET'])
 @authenticate
@@ -103,10 +105,11 @@ def logout_user(resp):
     }
     return jsonify(response_object), 200
 
+
 @auth_blueprint.route('/auth/status', methods=['GET'])
 @authenticate
 def get_user_status(resp):
-    
+
     user = User.query.filter_by(id=resp).first()
     response_object = {
         'status': 'success',

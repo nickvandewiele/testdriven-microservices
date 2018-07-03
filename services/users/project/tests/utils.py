@@ -19,4 +19,4 @@ def add_admin(username, email, password):
 
     db.session.add(user)
     db.session.commit()
-    return user    
+    return user
