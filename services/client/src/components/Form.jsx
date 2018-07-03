@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 const Form = (props) => {
 
-	if (props.isAuthenticated){
+	if (props.isAuthenticated) {
 		return <Redirect to='/' />;
 	}
 
