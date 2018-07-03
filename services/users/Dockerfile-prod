@@ -1,4 +1,4 @@
-FROM python:3.6.3
+FROM python:3.6.4
 
 # install environment dependencies
 RUN apt-get update -yqq \
@@ -11,16 +11,16 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # add requirements
-ADD ./requirements.txt /usr/src/app/requirements.txt
+COPY ./requirements.txt /usr/src/app/requirements.txt
 
 # install requirements
 RUN pip install -r requirements.txt
 
-# add entrypoint-prod.sh
-ADD ./entrypoint-prod.sh /usr/src/app/entrypoint-prod.sh
+# add entrypoint.sh
+COPY ./entrypoint-prod.sh /usr/src/app/entrypoint-prod.sh
 
 # add app
-ADD . /usr/src/app
+COPY . /usr/src/app
 
 # run server
 CMD ["./entrypoint-prod.sh"]
