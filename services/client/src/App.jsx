@@ -4,7 +4,6 @@ import axios from 'axios';
 import {Route, Switch} from 'react-router-dom';
 
 import UsersList from './components/UsersList';
-import AddUser from './components/AddUser';
 import About from './components/About';
 import NavBar from './components/NavBar';
 import Form from './components/Form';
@@ -122,18 +121,7 @@ class App extends Component {
 							<Switch>
 
 								<Route exact path='/' render={() => (
-									<div>
-										<h1>All Users</h1>
-										<hr/><br/>
-										<AddUser 
-											username = {this.state.username}
-											email = {this.state.email}
-											addUser={this.addUser}
-											handleChange={this.handleChange}
-										/>
-										<br/>
-										<UsersList users={this.state.users}/>			
-									</div>
+									<UsersList users={this.state.users}/>			
 									)} />
 								
 								<Route exact path='/about' component={About}/>
