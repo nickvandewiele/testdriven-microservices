@@ -19,7 +19,7 @@ then
 
 	if [ "$TRAVIS_BRANCH" == "staging" ]
 	then
-		export REACT_APP_USERS_SERVICE_URL="http://testdriven-staging-alb-206780891.us-east-1.elb.amazonaws.com"
+		export REACT_APP_USERS_SERVICE_URL="http://testdriven-staging-alb-1249147268.us-east-1.elb.amazonaws.com"
 	fi
 
 	if [ "$TRAVIS_BRANCH" == "staging" ] || \
