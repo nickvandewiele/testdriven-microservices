@@ -3,57 +3,59 @@
 if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]
 then
 
-	if [ "$TRAVIS_BRANCH" == "production" ]
-	then
-		JQ="jq --raw-output --exit-status"
+  if [ "$TRAVIS_BRANCH" == "production" ]
+  then
 
-		configure_aws_cli() {
-			aws --version
-			aws configure set default.region us-east-1
-			aws configure set default.output json
-			echo "AWS Configured!"
-		}
+    JQ="jq --raw-output --exit-status"
 
-		register_definition() {
-			if revision=$(aws ecs register-task-definition --cli-input-json "$task_def" | $JQ '.taskDefinition.taskDefinitionArn'); then
-				echo "Revision: $revision"
-			else
-				echo "Failed to register task definition"
-				return 1
-			fi
-		}
+    configure_aws_cli() {
+        aws --version
+        aws configure set default.region us-east-1
+        aws configure set default.output json
+        echo "AWS Configured!"
+    }
 
-		deploy_cluster() {
-			
-			# users
-			service="testdriven-users-prod-service"
-			template="ecs_users_prod_taskdefinition.json"
-			task_template=$(cat "ecs/$template")
-			task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $AWS_ACCOUNT_ID $AWS_RDS_URI $PRODUCTION_SECRET_KEY)
-			echo "$task_def"
-			register_definition
+    register_definition() {
+      if revision=$(aws ecs register-task-definition --cli-input-json "$task_def" | $JQ '.taskDefinition.taskDefinitionArn'); then
+        echo "Revision: $revision"
+      else
+        echo "Failed to register task definition"
+        return 1
+      fi
+    }
 
-			# client
-			service="testdriven-client-prod-service"
-			template="ecs_client_prod_taskdefinition.json"
-			task_template=$(cat "ecs/$template")
-			task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
-			echo "$task_def"
-			register_definition
 
-			# swagger
-			service="testdriven-swagger-prod-service"
-			template="ecs_swagger_prod_taskdefinition.json"
-			task_template=$(cat "ecs/$template")
-			task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
-			echo "$task_def"
-			register_definition
+    deploy_cluster() {
 
-		}
+      # users
+      service="testdriven-users-prod-service"
+      template="ecs_users_prod_taskdefinition.json"
+      task_template=$(cat "ecs/$template")
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $AWS_RDS_URI $PRODUCTION_SECRET_KEY)
+      echo "$task_def"
+      register_definition
 
-		configure_aws_cli
+      # client
+      service="testdriven-client-prod-service"
+      template="ecs_client_prod_taskdefinition.json"
+      task_template=$(cat "ecs/$template")
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
+      echo "$task_def"
+      register_definition
 
-		deploy_cluster
+      # swagger
+      service="testdriven-swagger-prod-service"
+      template="ecs_swagger_prod_taskdefinition.json"
+      task_template=$(cat "ecs/$template")
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
+      echo "$task_def"
+      register_definition
 
-	fi
+    }
+
+    configure_aws_cli
+    deploy_cluster
+
+  fi
+
 fi
