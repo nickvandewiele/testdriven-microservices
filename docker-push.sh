@@ -25,6 +25,8 @@ then
 	if [ "$TRAVIS_BRANCH" == "production" ]
 	then
 		export REACT_APP_USERS_SERVICE_URL="testdriven-production-alb-1013584659.us-east-1.elb.amazonaws.com"
+		export DATABASE_URL="$AWS_RDS_URI"
+		export SECRET_KEY="$PRODUCTION_SECRET_KEY"
 	fi
 
 	if [ "$TRAVIS_BRANCH" == "staging" ] || \
