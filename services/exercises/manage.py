@@ -6,7 +6,8 @@ import coverage
 
 from flask.cli import FlaskGroup
 
-from project import create_app
+from project import create_app, db
+from project.api.models import Exercise
 
 
 app = create_app()
@@ -47,6 +48,27 @@ def cov():
         COV.erase()
         return 0
     return 1
+
+@cli.command()
+def recreate_db():
+    """Recreates a database."""
+    db.drop_all()
+    db.create_all()
+    db.session.commit()
+
+@cli.command()
+def seed_db():
+    """Seeds the database."""
+
+    exercise = Exercise(
+            'Define a function called sum that takes two\
+             integers as arguments and returns their sum.', 
+            'sum(2,2)', 
+            '4'
+        )
+
+    db.session.add(exercise)
+    db.session.commit()
 
 
 if __name__ == '__main__':
